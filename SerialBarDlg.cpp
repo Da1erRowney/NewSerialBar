@@ -117,31 +117,59 @@ CSerialBar::~CSerialBar()
 
 
 BEGIN_MESSAGE_MAP(CSerialBar, CWnd)
-	
-	//}}AFX_MSG_MAP
-	
 	ON_COMMAND(ID_EXIT, OnExit)
 	ON_COMMAND(ID_PORTS, OnPorts)
-	ON_COMMAND(ID_ABOUT,OnAbout)
+	ON_COMMAND(ID_ABOUT, OnAbout)
+	ON_WM_CLOSE()          // Добавьте эту строку
+	ON_WM_DESTROY()        // И эту строку
 END_MESSAGE_MAP()
 
 
 void CSerialBar::OnExit()
 {
-	
-	this->DestroyWindow();
-	/*if(IDYES == MessageBox("Принудительное завершение SerialServer приведет к аварийному завершению клиентов. Продолжить ?","SerialBar - ВНИМАНИЕ",MB_YESNO | MB_DEFBUTTON2))
+    WriteLog("CSerialBar::OnExit() called");
+    
+    // Удаляем иконку из трея
+    if (_trayIcon)
+    {
+        _trayIcon->Remove();
+    }
+    
+    // Уничтожаем окно
+    this->DestroyWindow();
+}
+
+void CSerialBar::OnClose()
+{
+	// Вызывается при закрытии окна (включая закрытие через диспетчер задач)
+	WriteLog("CSerialBar::OnClose() called");
+
+	// Удаляем иконку из трея
+	if (_trayIcon)
 	{
-		
 		_trayIcon->Remove();
-		HRCALL(_iManager->Kill(),"Завершить работу сервера");
-	
-		
-		this->DestroyWindow();
-		
-	}*/
-	
- }
+	}
+
+	// Вызываем родительскую реализацию
+	CWnd::OnClose();
+}
+
+void CSerialBar::OnDestroy()
+{
+	// Вызывается при уничтожении окна
+	WriteLog("CSerialBar::OnDestroy() called");
+
+	// Дополнительная очистка, если нужна
+	if (_trayIcon)
+	{
+		_trayIcon->Remove();
+		delete _trayIcon;
+		_trayIcon = NULL;
+	}
+
+	// Вызываем родительскую реализацию
+	CWnd::OnDestroy();
+}
 
 void CSerialBar::OnAbout()
 {

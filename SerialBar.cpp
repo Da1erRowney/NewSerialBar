@@ -3,6 +3,10 @@
 #include "SerialBarDlg.h"
 #include "Tlhelp32.h"
 #include ".\serialbar.h"
+#include "notifyicon.h"
+#include <windows.h>
+
+#define APP_MUTEX_NAME _T("SerialBar_SingleInstance_Mutex")
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -67,10 +71,7 @@ BOOL CSerialBarApp::InitInstance()
 	else {
 		IsSettingsDlgVisible();
 	} 
-	
-		
-	
-	
+
 	return TRUE;
 }
 

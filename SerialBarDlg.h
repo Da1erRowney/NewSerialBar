@@ -30,6 +30,8 @@ protected:
 	afx_msg void OnExit();
 	afx_msg void OnPorts();
 	afx_msg void OnAbout();
+	afx_msg void OnClose();
+	afx_msg void OnDestroy();
 
 	DECLARE_MESSAGE_MAP()		
 	virtual BOOL OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pResult);
