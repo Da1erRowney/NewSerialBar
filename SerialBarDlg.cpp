@@ -15,6 +15,25 @@
 #define new DEBUG_NEW
 #endif
 
+CString CSettings::GetDocumentsPath()
+{
+	TCHAR szPath[MAX_PATH];
+	if (SUCCEEDED(SHGetFolderPath(NULL, CSIDL_MYDOCUMENTS, NULL, 0, szPath)))
+	{
+		return CString(szPath);
+	}
+	return _T("");
+}
+
+BOOL CSettings::CreateDirectoryRecursive(LPCTSTR lpPath)
+{
+	TCHAR szDir[MAX_PATH];
+	_tcscpy_s(szDir, MAX_PATH, lpPath);
+	PathRemoveFileSpec(szDir);
+
+	return (SHCreateDirectoryEx(NULL, szDir, NULL) == ERROR_SUCCESS);
+}
+
 CSerialBar::CSerialBar()
 
 {	
@@ -24,11 +43,17 @@ CSerialBar::CSerialBar()
 
 	_settings = NULL;
 	_selectedPort = 0;
-	
+
+	CString strDocuments = CSettings().GetDocumentsPath();
+	CString strFullPath;
+	strFullPath.Format(_T("%s\\¡›ÃÕ\\”ÌË ÓÌ\\serial.xml"), strDocuments);
+	CStringA strFilePath = CT2A(strFullPath);
+	CSettings().CreateDirectoryRecursive(strFullPath);
+
 	try
 	{
-	
-		CSettings::LoadAll(NULL,&_settings);
+		
+		CSettings::LoadAll(strFilePath,&_settings);
 		CSettings::SaveAll(NULL,_settings,TRUE);
 		
 	}
