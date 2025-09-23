@@ -46,7 +46,7 @@
 // Ваши пользовательские заголовки
 #include "../SerialServer/server_error.h"
 
-#define MAX_PORT 16
+#define MAX_PORT 160000
 #define CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
 
 // Для Winsock2 необходимо также подключить библиотеку
